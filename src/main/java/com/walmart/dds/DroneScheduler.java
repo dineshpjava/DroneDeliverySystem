@@ -44,7 +44,7 @@ public class DroneScheduler {
 		// served
 		while (currentTime <= END_TIME) {
 
-			addNewOrdersToSchedulerQueue(currentTime);
+			currentTime = addNewOrdersToSchedulerQueue(currentTime);
 
 			// exit if done serving all the orders
 			if (priorityQueue.isEmpty() && orderQueue.isEmpty()) {
@@ -81,6 +81,8 @@ public class DroneScheduler {
 		float NPS = ((promoters - detractors) / (totalOrders * 1f)) * 100;
 
 		saveResultsToFile(outputFilePath, NPS);
+		
+		System.out.println("\n*************** End of Day's work.... Output printed in file ***************\n");
 	}
 
 	/**
@@ -92,7 +94,7 @@ public class DroneScheduler {
 	 * @param currentTime : current time in seconds, current time starts counting
 	 *                    from 12am per second
 	 */
-	private void addNewOrdersToSchedulerQueue(int currentTime) {
+	private int addNewOrdersToSchedulerQueue(int currentTime) {
 
 		Iterator<CustomerOrder> iterator = orderQueue.iterator();
 		while (iterator.hasNext()) {
@@ -111,6 +113,8 @@ public class DroneScheduler {
 			currentTime = order.getOrderTimeInSecs() > currentTime ? order.getOrderTimeInSecs() : currentTime;
 			priorityQueue.add(order);
 		}
+
+		return currentTime;
 	}
 
 	/**
