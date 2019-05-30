@@ -2,12 +2,18 @@ package com.walmart.dds;
 
 import java.util.ArrayList;
 
+/**
+ * MinHeap Algorithm implementation
+ * 
+ * @author Dinesh
+ *
+ */
 public class Heap {
 
 	public static void buildMinHeap(ArrayList<CustomerOrder> orderList) {
 
-		for (int i = (orderList.size() - 1) / 2; i >= 0; i--) {
-			heapify(orderList, i);
+		for (int index = (orderList.size() - 1) / 2; index >= 0; index--) {
+			heapify(orderList, index);
 		}
 	}
 

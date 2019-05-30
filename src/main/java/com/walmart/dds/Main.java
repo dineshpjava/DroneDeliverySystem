@@ -32,6 +32,14 @@ public class Main {
 
 	}
 
+	/**
+	 * 
+	 * Method to validate the existence of input and output files
+	 * 
+	 * @param inputFilePath
+	 * @param outputFilePath
+	 * @return
+	 */
 	private static boolean isValidFilePath(String inputFilePath, String outputFilePath) {
 		File inFile = new File(inputFilePath);
 		if (!inFile.exists() || inFile.isDirectory()) {
@@ -47,6 +55,15 @@ public class Main {
 		return true;
 	}
 
+	/**
+	 * 
+	 * Method to read the input file, parse the content and create a list of
+	 * customer orders to be served.
+	 * 
+	 * @param filePath : input file path
+	 * @return list of customer orders which are sorted as per the order placed time
+	 *         stamp
+	 */
 	private static LinkedList<CustomerOrder> readFile(String filePath) {
 
 		LinkedList<CustomerOrder> orderQueue = new LinkedList<CustomerOrder>();
@@ -64,5 +81,4 @@ public class Main {
 
 		return orderQueue;
 	}
-
 }

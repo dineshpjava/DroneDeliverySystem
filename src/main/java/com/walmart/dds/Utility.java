@@ -2,6 +2,14 @@ package com.walmart.dds;
 
 public class Utility {
 
+	/**
+	 * 
+	 * Method to calculate duration of delivery to the provided customer address
+	 * 
+	 * @param customerAddress : customer address where the delivery has to be made
+	 * 
+	 * @return delivery duration in Seconds
+	 */
 	public static int getDeliveryDurationInSeconds(String customerAddress) {
 		String address;
 		String[] durationArray;
@@ -20,6 +28,13 @@ public class Utility {
 		return duration;
 	}
 
+	/**
+	 * 
+	 * Method to convert Time String in the format of HH:MM:SS into time in seconds
+	 * 
+	 * @param time : Time in the format of HH:MM:SS
+	 * @return time in seconds
+	 */
 	public static int getTimeInSecs(String time) {
 		String[] orderedTimeArray = time.split(":");
 		int timeInSecs = Integer.MAX_VALUE;
@@ -32,6 +47,13 @@ public class Utility {
 		return timeInSecs;
 	}
 
+	/**
+	 * 
+	 * Method to convert Time in seconds to String in the format of HH:MM:SS
+	 * 
+	 * @param timeInSeconds : Time in seconds
+	 * @return Time in the format of HH:MM:SS
+	 */
 	public static String formatToTime(int timeInSeconds) {
 		int hours = (int) (timeInSeconds / 3600);
 		int secondsLeft = (int) (timeInSeconds - hours * 3600);

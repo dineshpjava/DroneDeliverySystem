@@ -20,6 +20,15 @@ public class CustomerOrder {
 		this.deliveryDuration = Utility.getDeliveryDurationInSeconds(customerAddress);
 	}
 
+	/**
+	 * 
+	 * Method to help figure out if the order is placed in future time or present
+	 * time
+	 * 
+	 * @param currentTime : current time in seconds, current time starts counting
+	 *                    from 12am per second
+	 * @return boolean true if the order is ready to be served
+	 */
 	public boolean hasLapsed(int currentTime) {
 		int currentTimeInSecs = currentTime;
 		if (orderTimeInSecs < currentTimeInSecs) {
@@ -28,6 +37,17 @@ public class CustomerOrder {
 		return false;
 	}
 
+	/**
+	 * 
+	 * Method to add start time stamp of when the delivery was scheduled to be
+	 * fulfilled. Adds Feedback details to this order, assigns 1 if the order is
+	 * served less than 1 hour - promoter assigns 0 if the order is served less than
+	 * 3 hour but more than 1 hour - neutral assigns -1 if the order is served more
+	 * than 3 hour - detractors
+	 * 
+	 * @param currentTime : current time in seconds, current time starts counting
+	 *                    from 12am per second
+	 */
 	public void setOrderFulfillTime(int currentTime) {
 		String fulfilledTime = Utility.formatToTime(currentTime);
 		orderFulfillTime = fulfilledTime;

@@ -1,30 +1,38 @@
 package com.walmart.dds;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 public class DroneScheduler {
 
-	private ArrayList<CustomerOrder> priorityQueue = new ArrayList<CustomerOrder>();
-	private ArrayList<CustomerOrder> ordersFulfilledList = new ArrayList<CustomerOrder>();
-	private LinkedList<CustomerOrder> orderQueue;
-	private String outputFilePath;
 	private static final int START_TIME = 21600; // 6:00:00 am
 	private static final int END_TIME = 79200; // 10:00:00 pm
 
+	private ArrayList<CustomerOrder> priorityQueue;
+	private ArrayList<CustomerOrder> ordersFulfilledList;
+	private LinkedList<CustomerOrder> orderQueue;
+	private String outputFilePath;
+
 	public DroneScheduler(LinkedList<CustomerOrder> orderQueue, String filePath) {
+		priorityQueue = new ArrayList<CustomerOrder>();
+		ordersFulfilledList = new ArrayList<CustomerOrder>();
 		this.orderQueue = orderQueue;
 		this.outputFilePath = filePath;
 	}
 
+	/**
+	 * 
+	 * This method is to prioritize the orders and dispatch the orders as per the
+	 * priority. Updates the NPS contributers for each order and calculates the NPS
+	 * at the end of the day's work
+	 * 
+	 */
 	public void scheduleAndDispatchDeliveries() {
 
 		int totalOrders = orderQueue.size();
@@ -32,12 +40,13 @@ public class DroneScheduler {
 		int lapsedTime = 0;
 		int promoters = 0, detractors = 0;
 
-		// keep serving orders until end of day
+		// keep serving orders until end of day or until there are no more orders to be
+		// served
 		while (currentTime <= END_TIME) {
 
-			// check to see if new orders can be added to schedulers queue
 			addNewOrdersToSchedulerQueue(currentTime);
 
+			// exit if done serving all the orders
 			if (priorityQueue.isEmpty() && orderQueue.isEmpty()) {
 				break;
 			}
@@ -74,6 +83,15 @@ public class DroneScheduler {
 		saveResultsToFile(outputFilePath, NPS);
 	}
 
+	/**
+	 * 
+	 * check to see if new orders are placed by peeking at the start of Order Queue
+	 * and add those orders to schedulers queue. If no orders are available to serve
+	 * rest until next order is available.
+	 * 
+	 * @param currentTime : current time in seconds, current time starts counting
+	 *                    from 12am per second
+	 */
 	private void addNewOrdersToSchedulerQueue(int currentTime) {
 
 		Iterator<CustomerOrder> iterator = orderQueue.iterator();
@@ -87,7 +105,7 @@ public class DroneScheduler {
 			}
 		}
 
-		// wait for new orders if there are no orders to serve
+		// wait for new orders if there are no orders to serve at that point in time
 		if (priorityQueue.isEmpty() && !orderQueue.isEmpty()) {
 			CustomerOrder order = orderQueue.removeFirst();
 			currentTime = order.getOrderTimeInSecs() > currentTime ? order.getOrderTimeInSecs() : currentTime;
@@ -95,6 +113,16 @@ public class DroneScheduler {
 		}
 	}
 
+	/**
+	 * 
+	 * This method calculates the priority of each order at that point in time.
+	 * Priority order is the ascending order of sum of an order's waiting time and
+	 * the order's delivery duration. The priorityQueue is updated with new
+	 * priorities at the start of every delivery, to pick the shortest job first.
+	 * 
+	 * @param currentTime : current time in seconds, current time starts counting
+	 *                    from 12am per second
+	 */
 	private void updatePrioritiesOfOrders(int currentTime) {
 		for (int i = 0; i < priorityQueue.size(); i++) {
 			CustomerOrder order = priorityQueue.get(i);
@@ -102,6 +130,14 @@ public class DroneScheduler {
 		}
 	}
 
+	/**
+	 * 
+	 * This method returns the next order to be served as per priority. Priority is
+	 * based on the shortest job first. Priority is a sum of an order's waiting time
+	 * and the order's delivery duration.
+	 * 
+	 * @return next order to be served
+	 */
 	private CustomerOrder getNextScheduledOrder() {
 
 		Heap.buildMinHeap(priorityQueue);
@@ -112,10 +148,28 @@ public class DroneScheduler {
 		return currentOrder;
 	}
 
+	/**
+	 * 
+	 * This method is responsible for serving orders and updating the order object
+	 * with fulfillment details
+	 * 
+	 * @param currentOrder : order to be dispatched
+	 * @param currentTime  : current time in seconds, current time starts counting
+	 *                     from 12am per second
+	 */
+
 	private void dispatchOrder(CustomerOrder currentOrder, int currentTime) {
 		currentOrder.setOrderFulfillTime(currentTime);
 		ordersFulfilledList.add(currentOrder);
 	}
+
+	/**
+	 * 
+	 * Method to print out results to an output file
+	 * 
+	 * @param filePath : Path to output file
+	 * @param NPS      : NPS of the orders that are served
+	 */
 
 	private void saveResultsToFile(String filePath, float NPS) {
 		// Get the file reference
