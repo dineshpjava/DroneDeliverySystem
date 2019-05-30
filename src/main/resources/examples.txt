@@ -1,3 +1,8 @@
+ ******** Principle for solving the scheduling is following the concept of being greedy ***********
+
+The Scheduling algorithm implemented takes Greedy Approach - Consider 2 orders which have same delivery duration, then an order which is placed in distant past has less priority. In the same way if 2 orders are placed more or less at same time then an order which has less travel duration has more priority.
+
+
 Execution command 
 
 cd /target
