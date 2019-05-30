@@ -81,7 +81,7 @@ public class DroneScheduler {
 		float NPS = ((promoters - detractors) / (totalOrders * 1f)) * 100;
 
 		saveResultsToFile(outputFilePath, NPS);
-		
+
 		System.out.println("\n*************** End of Day's work.... Output printed in file ***************\n");
 	}
 
@@ -123,6 +123,11 @@ public class DroneScheduler {
 	 * Priority order is the ascending order of sum of an order's waiting time and
 	 * the order's delivery duration. The priorityQueue is updated with new
 	 * priorities at the start of every delivery, to pick the shortest job first.
+	 * 
+	 * The Priority is given based on greedy algorithm - Consider 2 orders which
+	 * have same delivery duration, then an order which is placed in distant past
+	 * has less priority. In the same way if 2 orders are placed more or less at
+	 * same time then an order which has less travel duration has more priority.
 	 * 
 	 * @param currentTime : current time in seconds, current time starts counting
 	 *                    from 12am per second
