@@ -16,11 +16,12 @@ C:\{classpath*} \DroneDeliverySystem>mvn package
 
 •	To execute the jar file, give the following command along with command line variable input_file_path output_file_path
 
-C:\{classpath*} \DroneDeliverySystem\target>java -jar DroneDeliveryService-0.0.1-SNAPSHOT.jar 10
-•	The above command creates 10 customer threads to serve the customers
+C:\{classpath*} \DroneDeliverySystem\target>java -jar DroneDeliveryService-0.0.1-SNAPSHOT.jar input_file_path output_file_path
 
 
 --- ASSUMPTIONS MADE ---
+
+•	The Scheduling algorithm implemented takes Greedy Approach - Consider 2 orders which have same delivery duration, then an order which is placed in distant past has less priority. In the same way if 2 orders are placed more or less at same time then an order which has less travel duration has more priority.
 
 •	A Drone can carry a single package at a time
 
@@ -30,7 +31,7 @@ C:\{classpath*} \DroneDeliverySystem\target>java -jar DroneDeliveryService-0.0.1
 
 •	The orders in the input file are placed on the current day starting at 12 am
 
-•	The total number hours required to serve the orders may be more than 16 hours which is 6am to 10pm
+•	The total number of hours required to serve the orders may be more than 16 hours which is 6am to 10pm
 
 •	Even though we have the complete order list, a drone can't serve an order at any point in time if the order is placed at future time. For example we can't serve order placed at 10am at 8am.
 
@@ -46,7 +47,7 @@ C:\{classpath*} \DroneDeliverySystem\target>java -jar DroneDeliveryService-0.0.1
 •	CustomerOrder: This is the class notation of the Order placed by a customer.
 
 •	DroneScheduler: This is the actual business class of our Application, where all the orders get prioritized and delivered, as per the busniess rules that serve the Order which has more priority, priority is the sum of time in seconds of the duration of delivery and the time in seconds since the order is made.
-    Greedy Approach - Consider 2 orders which have same delivery duration, then an order which is placed in distant past has less priority.
+    The Scheduling algorithm implemented takes Greedy Approach - Consider 2 orders which have same delivery duration, then an order which is placed in distant past has less priority. In the same way if 2 orders are placed more or less at same time then an order which has less travel duration has more priority.
 
 •	Heap: Used to sort the orders as per priority
 
