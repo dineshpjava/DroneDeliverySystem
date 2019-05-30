@@ -1,0 +1,6 @@
+Execution command 
+
+cd /target
+
+java -jar DroneDeliveryService-0.0.1-SNAPSHOT.jar /Users/dini/Downloads/input.txt /Users/dini/Downloads/output.txt
+
